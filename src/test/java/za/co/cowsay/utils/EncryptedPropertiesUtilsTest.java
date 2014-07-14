@@ -20,6 +20,13 @@ public class EncryptedPropertiesUtilsTest {
 
 	@Before
 	public void setup() throws FileNotFoundException, IOException {
+		File file = new File("./src/test/resources/application_encrypted.properties");
+
+		if (file.exists()) {
+			if (file.delete()) {
+				System.out.println("Deleted old temporary resources in: \"src/test/resources\"");
+			} 
+		}
 	}
 
 	@Test
@@ -46,17 +53,6 @@ public class EncryptedPropertiesUtilsTest {
 			for (Entry<Object, Object> encryptedProperty : encryptedProperties.entrySet()) {
 				Assert.assertEquals(property.getKey(), encryptedProperty.getKey());
 				Assert.assertNotEquals(property.getValue(), encryptedProperty.getValue());
-			}
-		}
-	}
-
-	@After
-	public void deleteTheEncryptedPropertiesFile() {
-		File file = new File("./src/test/resources/application_encrypted.properties");
-
-		if (file.exists()) {
-			if (file.delete()) {
-				System.out.println("Deleted temperorary resources in: \"src/test/resources\"");
 			}
 		}
 	}

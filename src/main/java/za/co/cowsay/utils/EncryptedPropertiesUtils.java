@@ -75,23 +75,32 @@ public final class EncryptedPropertiesUtils implements EncryptedProperties{
 		properties.store(out, comments);
 	}
 
-	public void encryptExistingProperties() {
+	public void encryptExistingProperties(String existingPropertiesFileName) {
 		
 	}
 	
-	public void createNewEncryptedPropertiesFromExisting(String existingPropertiesFilename, String encryptedPropertiesFileName, String comments) {
-		try (FileOutputStream outputStream = new FileOutputStream(new File(encryptedPropertiesFileName))) {
+	/**
+	 * Takes the path to an existing file and creates new properties file at 'encryptedPropertiesFileName' path.
+	 * The 'comments' argument adds a comment at the top of the new properties file
+	 * @param existingPropertiesFileName
+	 * @param encryptedPropertiesFileName
+	 * @param comments
+	 */
+	public void createNewEncryptedPropertiesFromExisting(String existingPropertiesFileName, String encryptedPropertiesFileName, String comments) {
+		try {
 		Properties props = new Properties();
-		props.load(new FileInputStream(new File(existingPropertiesFilename)));
+		props.load(new FileInputStream(new File(existingPropertiesFileName)));
 				
 		for (Entry<Object, Object> property: props.entrySet()) {
 			this.setProperty((String) property.getKey(), (String)property.getValue());
 		}
 		
+		FileOutputStream outputStream = new FileOutputStream(new File(encryptedPropertiesFileName));
 		this.store(outputStream, comments);
 		
 		outputStream.flush();
 		outputStream.close();
+		outputStream = null;
 		
 		} catch (IOException fne) {
 			LOGGER.error(Logger.EVENT_FAILURE, "Could not create new Encryption file from Existing properties: " + fne);
