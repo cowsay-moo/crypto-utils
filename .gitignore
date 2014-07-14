@@ -38,3 +38,6 @@ Icon
 
 # Maven files
 target
+
+# Eclipse files
+.settings
